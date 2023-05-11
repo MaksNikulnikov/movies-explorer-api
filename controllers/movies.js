@@ -3,6 +3,7 @@ const Movie = require('../models/movie');
 
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
+const ForbiddenError = require('../errors/ForbiddenError');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({})
@@ -12,7 +13,12 @@ module.exports.getMovies = (req, res, next) => {
 
 module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId).orFail()
-    .then((searchedMovie) => searchedMovie.deleteOne().then(() => { res.send(searchedMovie); }))
+    .then((searchedMovie) => {
+      if (!(String(req.user._id) === searchedMovie.owner.toString())) {
+        return Promise.reject(new ForbiddenError('Вы не можете удалить этот фильм'));
+      }
+      return searchedMovie.deleteOne().then(() => { res.send(searchedMovie); });
+    })
     .catch((err) => {
       if (err instanceof mongoose.Error.DocumentNotFoundError) {
         next(new NotFoundError('Передан несуществующий _id фильма.'));
