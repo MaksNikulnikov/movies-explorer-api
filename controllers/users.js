@@ -73,6 +73,8 @@ module.exports.patchUser = (req, res, next) => {
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
         next(new BadRequestError(MESSAGE_USER_DATA_INCORRECT_CHANGING));
+      } else if (err.code === 11000) {
+        next(new ConflictError(MESSAGE_EMAIL_MUST_BE_UNIQUE));
       } else {
         next(err);
       }
