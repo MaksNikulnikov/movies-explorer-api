@@ -1,6 +1,7 @@
 const URL_REGEXP = /(https?:\/\/)(w{3}\.)?\w+#?/;
 const DEV_KEY = 'dev-secret';
 const MODE_PRODUCTION = 'production';
+const MODE_DEV = 'dev';
 
 const MESSAGE_NOT_FOUND = 'По указанному URL ничего нет';
 const MESSAGE_UNAUTORIZED = 'Необходима авторизация';
@@ -20,6 +21,7 @@ module.exports = {
   URL_REGEXP,
   DEV_KEY,
   MODE_PRODUCTION,
+  MODE_DEV,
   MESSAGE_NOT_FOUND,
   MESSAGE_UNAUTORIZED,
   MESSAGE_INTERNAL_SERVER_ERROR,
